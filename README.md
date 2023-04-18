@@ -31,7 +31,7 @@ THEN I am able to successfully create and delete reactions to thoughts and add a
 
 #### Walk-Through Video
 
-[Video]()
+[Video](https://drive.google.com/file/d/1yrP52maju3rOAjWs0np6O1FPbL__ytTL/view)
 
 #### Application Screenshots
 [Figure 1](./images/Screenshot%202023-04-18%20164532.png)
