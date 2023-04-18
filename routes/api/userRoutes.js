@@ -1,22 +1,21 @@
 const router = require("express").Router();
 
-const { User, Thought } = require("../../models");
+const {
+  getAllUsers,
+  getSingleUser,
+  createUser,
+  updateUser,
+  deleteUser,
+  addFriend,
+  deleteFriend,
+} = require("../../controllers/userController");
 
-router.post("/",(req,res)=>{
-  const newUser=new User({
-    username:req.body.
-  })
-})
+// /api/users
+router.route("/").get(getAllUsers).post(createUser);
 
-router.get("/", (req, res) => {
-  User.find({}, (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(result);
-    }
-  });
-});
+// /api/users/:userId
+router.route("/:userId").get(getSingleUser).put(updateUser).delete(deleteUser);
 
+// /api/users/:userId/friends/:friendId
+router.route("/:userId/friends/:friendId").post(addFriend).delete(deleteFriend);
 module.exports = router;
