@@ -17,7 +17,7 @@ const reactionSchema = new Schema(
     },
     createdAt: {
       type: Date,
-      default: () => date.now(),
+      default: Date.now,
     },
   },
   //run getters when converting a document to JSON
@@ -30,23 +30,31 @@ const reactionSchema = new Schema(
 );
 
 //Thought Schema
-const thoughtSchema = new Schema({
-  thoughtText: {
-    type: String,
-    required: true,
-    minLength: 1,
-    maxLength: 280,
+const thoughtSchema = new Schema(
+  {
+    thoughtText: {
+      type: String,
+      required: true,
+      minLength: 1,
+      maxLength: 280,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    reaction: [reactionSchema],
   },
-  createdAt: {
-    type: Date,
-    default: () => date.now(),
-  },
-  username: {
-    type: String,
-    required: true,
-  },
-  reaction: [reactionSchema],
-});
+  {
+    toJSON: {
+      getters: true,
+    },
+    id: false,
+  }
+);
 
 thoughtSchema.virtual("reactionCount").get(function () {
   return this.reaction.length;
