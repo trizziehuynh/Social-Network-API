@@ -67,4 +67,63 @@ module.exports = {
   },
 
   //`DELETE` to remove a thought by its `_id`
+  deleteThought(req, res) {
+    Thought.findByIdAndRemove({ _id: req.params.thoughtId })
+      .then((thought) => {
+        if (!thought) {
+          return res.status(404).json({ message: "No thought with this id!" });
+        }
+        return User.findByIdAndUpdate(
+          { thoughts: req.params.thoughtId },
+          { $pull: { thoughts: req.params.thoughtId } },
+          { new: true }
+        );
+      })
+      .then((user) => {
+        if (!user) {
+          return res
+            .status(404)
+            .json({ message: "Thought deleted but no user with this id!" });
+        }
+        res.json({ message: "Thought deleted!" });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
+
+  //`/api/thoughts/:thoughtId/reactions`
+  //`POST` to create a reaction stored
+  //in a single thought's `reactions` array field
+  createReaction(req, res) {
+    Thought.findByIdAndUpdate(
+      { _id: req.params.thoughtId },
+      { $addToSet: { reaction: req.body } },
+      { new: true }
+    ).then((thought) => {
+      if (!thought) {
+        return res.status(404).json({ message: "No thought with this id!" });
+      }
+    });
+  },
+
+  // `DELETE` to pull and remove a reaction by the reaction's `reactionId` value
+  deleteReaction(req, res) {
+    Thought.findByIdAndUpdate(
+      { _id: req.params.thoughtId },
+      { $pull: { reaction: { reactionId: req.params.reactionId } } },
+      { new: true }
+    )
+      .then((thought) => {
+        if (!thought) {
+          return res.status(404).json({ message: "No thought with this id!" });
+        }
+        res.json(thought);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
 };
