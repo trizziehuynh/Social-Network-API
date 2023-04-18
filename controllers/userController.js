@@ -11,9 +11,7 @@ module.exports = {
   //`GET` a single user by its `_id'
   //and populated thought and friend data
   getSingleUser(req, res) {
-    User.findOne({
-      _id: req.params.userId,
-    })
+    User.findOne({ _id: req.params.userId })
       .populate("thoughts")
       .populate("friends")
       .then((user) => {
@@ -64,8 +62,7 @@ module.exports = {
   //`DELETE` to remove user by its `_id`
   //"else"- remove a user's associated thoughts when deleted.
   deleteUser(req, res) {
-    User.findByIdAndDelete({ _id: req.params.userId })
-    .then((user) => {
+    User.findByIdAndDelete({ _id: req.params.userId }).then((user) => {
       if (!user) {
         return res.status(404).json({ message: "No user with this id!" });
       }
